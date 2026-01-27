@@ -1,6 +1,5 @@
 import configparser
 import io
-import sys
 
 import gi
 

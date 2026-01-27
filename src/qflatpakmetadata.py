@@ -1,8 +1,7 @@
 import sys
 
 import gi
-
-from qflatpakfetchworker import QFlatpakWorker
+from planex.qflatpakfetchworker import QFlatpakWorker
 
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
