@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "org.kde.planex"
+version = "0.1"
+authors = [{name = "Micro", email = "microgamercz@proton.me"}]
+maintainers = [{name = "Micro", email = "microgamercz@proton.me"}]
+description = "A simple package installer for Plasma"
+classifiers = [
+    "Development Status :: 5 - Production/Stable", # Definitely not
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Utilities",
+    "Programming Language :: Python",
+    "Operating System :: POSIX :: Linux",
+]
+keywords = ["flatpak package installer"]
+urls = {Homepage = "https://github.com/MicrogamerCz/planex"}
+dependencies = ["gi"]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.scripts]
+simplemdviewer = "planex.app:main"
+
+[tool.setuptools]
+packages = ["planex"]
+package-dir = {planex = "src"}
+include-package-data = true
+
+[tool.setuptools.data-files]
+"share/applications" = ["org.kde.planex.desktop"]
+"share/icons/hicolor/scalable/apps" = ["org.kde.planex.svg"]
+"share/metainfo" = ["org.kde.planex.metainfo.xml"]

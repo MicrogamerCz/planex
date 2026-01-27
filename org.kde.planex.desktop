@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Planex
+Name[cs]=Planex
+Comment=Package installer utility for Plasma
+Comment[cs]=Nástroj na instalaci balíčků pro prostředí Plasma
+Version=1.0
+Exec=planex
+Icon=org.kde.planex
+Type=Application
+Terminal=false
+Categories=Settings;PackageManager;Applet;KDE;Qt;
+X-KDE-FormFactor=desktop;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component type="desktop">
+  <id>org.kde.planex</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Planex</name>
+  <summary>Package installer utility for Plasma</summary>
+  <description>
+    <p>Package installer utility for Plasma</p>
+  </description>
+  <url type="homepage">https://github.com/MicrogamerCz/planex</url>
+  <releases>
+    <!-- <release version="0.1" date="2022-02-25">
+      <description>
+        <p>First release</p>
+      </description>
+    </release> -->
+  </releases>
+  <provides>
+    <binary>planex</binary>
+  </provides>
+</component>
