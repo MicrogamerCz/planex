@@ -2,6 +2,7 @@ import configparser
 import io
 
 import gi
+from gi.repository.Gio import Cancellable
 
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
