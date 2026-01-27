@@ -4,22 +4,23 @@ import QtQuick.Controls as Controls
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.core as PCore
 import org.kde.plasma.components as PComp
+import org.kde.layershell as LS
 
 import org.kde.planex
 
-// Kirigami.ApplicationWindow {
 PCore.Window {
     id: root
 
-    title: qsTr("Simple Markdown viewer")
+    LS.Window.layer: LS.Window.LayerTop
+    LS.Window.anchors: LS.Window.AnchorNone
+    visible: true
+
+    title: qsTr("Planex")
 
     minimumWidth: Kirigami.Units.gridUnit * 50
     maximumWidth: minimumWidth
     minimumHeight: Kirigami.Units.gridUnit * 35
     maximumHeight: minimumHeight
-    visible: true
-
-    // pageStack.initialPage: initPage
 
     QFlatpakMetadata {
         id: flatpak

@@ -12,6 +12,8 @@ from PySide6.QtCore import QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
+os.environ["QT_WAYLAND_SHELL_INTEGRATION"] = "layer-shell"
+
 
 def main():
     app = QGuiApplication(sys.argv)
