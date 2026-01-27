@@ -15,15 +15,16 @@ QML_IMPORT_MAJOR_VERSION = 1
 
 @QmlElement
 class QFlatpakMetadata(QObject):
-    progressChanged = Signal()
+    preloadChanged = Signal()
+    preloadFinished = Signal()
     metadataChanged = Signal()
 
-    def __init__(self):
+    def __init__(self, skipReload=True):
         super().__init__()
 
-        self._progress_message = "Refreshing..."
-        self._progress_percent = -1  # Any negative progress is indereminate
-        self.progressChanged.emit()
+        self._preload_message = "Refreshing..."
+        self._preload_percent = -1  # Any negative progress is indereminate
+        self.preloadChanged.emit()
 
         self.app: AppStream.Component | None = None
 
@@ -33,12 +34,10 @@ class QFlatpakMetadata(QObject):
             return  # TODO: Print error message
 
         if sys.argv[1].endswith(".flatpakref"):
-            self.flatpakref_init(sys.argv[1])
+            self.flatpakref_init(sys.argv[1], skipReload)
 
-        super().__init__()
-
-    def flatpakref_init(self, ref: str) -> None:
-        self.worker = QFlatpakWorker(ref)
+    def flatpakref_init(self, ref: str, skip) -> None:
+        self.worker = QFlatpakWorker(ref, skip)
 
         self.worker.moveToThread(self.work_thread)
 
@@ -47,15 +46,16 @@ class QFlatpakMetadata(QObject):
         self.worker.finished.connect(self.worker.deleteLater)
         self.work_thread.finished.connect(self.work_thread.deleteLater)
 
-        self.worker.progressChanged.connect(self.progress_callback)
+        self.worker.preloadChanged.connect(self.preload_callback)
         self.worker.finished.connect(self.refresh_finished)
+        self.worker.finished.connect(self.preloadFinished)
 
         self.work_thread.start()
 
-    def progress_callback(self, status: str, progress: int):
-        self._progress_message = status
-        self._progress_percent = progress
-        self.progressChanged.emit()
+    def preload_callback(self, status: str, progress: int):
+        self._preload_message = status
+        self._preload_percent = progress
+        self.preloadChanged.emit()
         return True
 
     def refresh_finished(self, app_id: str):
@@ -65,13 +65,13 @@ class QFlatpakMetadata(QObject):
         self.app = components.index_safe(0)
         self.metadataChanged.emit()
 
-    @Property(str, notify=progressChanged)
-    def progressMessage(self):
-        return self._progress_message
+    @Property(str, notify=preloadChanged)
+    def preloadMessage(self):
+        return self._preload_message
 
-    @Property(int, notify=progressChanged)
-    def progressPercent(self):
-        return self._progress_percent
+    @Property(int, notify=preloadChanged)
+    def preloadPercent(self):
+        return self._preload_percent
 
     @Property(str, notify=metadataChanged)
     def icon(self):
@@ -126,7 +126,3 @@ class QFlatpakMetadata(QObject):
             return images
         else:
             return ""
-
-    # @Slot(result=str)
-    # def mdFormat(self):
-    # return ""

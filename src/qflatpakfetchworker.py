@@ -5,18 +5,18 @@ import gi
 
 gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
-from gi.repository import AppStream, Flatpak
-from PySide6.QtCore import QObject, QThread, Signal, Slot
+from gi.repository import Flatpak
+from PySide6.QtCore import QObject, Signal, Slot
 
 
 class QFlatpakWorker(QObject):
-    progressChanged = Signal(str, int)
+    preloadChanged = Signal(str, int)
     finished = Signal(str)
-    # error = Signal(str)
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, skipReload):
         super().__init__()
         self.file_path = file_path
+        self.skipReload = skipReload
 
     @Slot()
     def run(self):
@@ -27,14 +27,13 @@ class QFlatpakWorker(QObject):
             remote_name = config.get("Flatpak Ref", "SuggestRemoteName")
             app_id = config.get("Flatpak Ref", "Name")
 
-            # install = Flatpak.Installation.new_system(None)
-            # install.update_appstream_full_sync(
-            # remote_name, progress=self.callback, cancellable=None
-            # )
-            # install.update_appstream_sync(remote_name)
-            self.callback("", 100, False, None)
+            if not self.skipReload:
+                install = Flatpak.Installation.new_system(None)
+                install.update_appstream_full_sync(
+                    remote_name, progress=self.callback, cancellable=None
+                )
             self.finished.emit(app_id)
 
     def callback(self, status: str, progress: int, estimate: bool, data):
-        self.progressChanged.emit(status, progress)
+        self.preloadChanged.emit(status, progress)
         return True

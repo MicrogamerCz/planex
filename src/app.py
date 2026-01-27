@@ -23,7 +23,7 @@ def main():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
     base_path = os.path.abspath(os.path.dirname(__file__))
-    url = QUrl(f"file://{base_path}/qml/main.qml")
+    url = QUrl(f"file://{base_path}/qml/Main.qml")
     engine.load(url)
 
     if len(engine.rootObjects()) == 0:
