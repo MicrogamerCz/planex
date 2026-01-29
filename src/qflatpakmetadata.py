@@ -25,7 +25,9 @@ class QFlatpakMetadata(QObject):
         self._preload_message = "Refreshing..."
         self._preload_percent = -1  # Any negative progress is indereminate
         self.preloadChanged.emit()
+        self._downloading = False
 
+        self.worker: QFlatpakWorker | None = None
         self.app: AppStream.Component | None = None
 
         self.work_thread = QThread()
@@ -37,14 +39,14 @@ class QFlatpakMetadata(QObject):
             self.flatpakref_init(sys.argv[1], skipReload)
 
     def flatpakref_init(self, ref: str, skip) -> None:
-        self.worker = QFlatpakWorker(ref, skip)
+        if not self.worker:
+            self.worker = QFlatpakWorker(ref, skip)
 
+        self.worker.mode = 1
         self.worker.moveToThread(self.work_thread)
 
         self.work_thread.started.connect(self.worker.run)
         self.worker.finished.connect(self.work_thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.work_thread.finished.connect(self.work_thread.deleteLater)
 
         self.worker.preloadChanged.connect(self.preload_callback)
         self.worker.finished.connect(self.refresh_finished)
@@ -64,6 +66,26 @@ class QFlatpakMetadata(QObject):
         components: AppStream.ComponentBox = pool.get_components_by_id(app_id)  # pyright: ignore[reportAttributeAccessIssue]
         self.app = components.index_safe(0)
         self.metadataChanged.emit()
+
+    @Slot()
+    def install(self):
+        if not self.worker:
+            return
+
+        self._downloading = True
+        self.preloadChanged.emit()
+
+        print("I'm downloading!")
+
+        # self.worker.moveToThread(self.thread())
+        self.worker.mode = 2
+        # self.worker.moveToThread(self.work_thread)
+
+        self.work_thread.start()
+
+    @Property(bool, notify=preloadChanged)
+    def downloading(self):
+        return self._downloading
 
     @Property(str, notify=preloadChanged)
     def preloadMessage(self):
