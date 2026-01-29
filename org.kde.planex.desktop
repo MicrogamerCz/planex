@@ -4,6 +4,7 @@ Name[cs]=Planex
 Comment=Package installer utility for Plasma
 Comment[cs]=Nástroj na instalaci balíčků pro prostředí Plasma
 Version=1.0
+MimeType=application/vnd.flatpak;application/vnd.flatpak.ref
 Exec=planex
 Icon=org.kde.planex
 Type=Application
