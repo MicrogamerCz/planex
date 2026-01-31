@@ -19,8 +19,9 @@ QML_IMPORT_MAJOR_VERSION = 1
 @QmlElement
 class QFlatpakMetadata(QObject):
     preloadChanged = Signal()
-    preloadFinished = Signal()
     metadataChanged = Signal()
+    loaded = Signal()
+    finished = Signal()
 
     def __init__(self, skipReload=True):
         super().__init__()
@@ -30,7 +31,9 @@ class QFlatpakMetadata(QObject):
         self.preloadChanged.emit()
         self._downloading = False
 
-        self.worker: QFlatpakWorker | None = None
+        self.loaded.connect(lambda: print("loaded"))
+
+        self.worker: QFlatpakWorker = QFlatpakWorker()
         self.app: AppStream.Component | None = None
 
         self.work_thread = QThread()
@@ -39,23 +42,43 @@ class QFlatpakMetadata(QObject):
             return  # TODO: Print error message
 
         if sys.argv[1].endswith(".flatpakref"):
-            self.flatpakref_init(sys.argv[1], skipReload)
+            with io.open(sys.argv[1]) as file:
+                data = file.read()
+                self.worker.flatpak_ref = data
 
-    def flatpakref_init(self, ref: str, skip) -> None:
-        if not self.worker:
-            self.worker = QFlatpakWorker(ref, skip)
+                self.config = configparser.ConfigParser()
+                self.config.read_string(data)
 
-        self.worker.mode = 1
-        self.worker.moveToThread(self.work_thread)
+                self.app_id = self.config.get("Flatpak Ref", "Name")
+                self.prepare_worker()
 
-        self.work_thread.started.connect(self.worker.run)
+                if not self.fetch_component():
+                    self.reload()
+
+    def prepare_worker(self):
+        self.worker.progress.connect(self.preload_callback)
         self.worker.finished.connect(self.work_thread.quit)
 
-        self.worker.preloadChanged.connect(self.preload_callback)
-        self.worker.finished.connect(self.refresh_finished)
-        self.worker.finished.connect(self.preloadFinished)
+        self.worker.app_id = self.app_id
+        self.worker.remote_name = self.config.get("Flatpak Ref", "SuggestRemoteName")
+        self.worker.is_runtime = self.config.get("Flatpak Ref", "IsRuntime") == "true"
+        self.worker.branch = self.config.get("Flatpak Ref", "Branch")
 
-        self.work_thread.start()
+        self.worker.moveToThread(self.work_thread)
+
+    def fetch_component(self) -> bool:
+        pool = AppStream.Pool()
+        pool.load()
+        components: AppStream.ComponentBox = pool.get_components_by_id(self.app_id)  # pyright: ignore[reportAttributeAccessIssue]
+
+        if components.get_size() == 0:
+            return False
+
+        self.app = components.index_safe(0)
+        QTimer.singleShot(0, self.loaded.emit)
+        QTimer.singleShot(0, self.metadataChanged.emit)
+
+        return True
 
     def preload_callback(self, status: str, progress: int):
         self._preload_message = status
@@ -63,26 +86,27 @@ class QFlatpakMetadata(QObject):
         self.preloadChanged.emit()
         return True
 
-    def refresh_finished(self, app_id: str):
-        pool = AppStream.Pool()
-        pool.load()
-        components: AppStream.ComponentBox = pool.get_components_by_id(app_id)  # pyright: ignore[reportAttributeAccessIssue]
-        self.app = components.index_safe(0)
-        self.metadataChanged.emit()
+    def reload(self) -> None:
+        self.work_thread.started.connect(
+            self.worker.sync, Qt.ConnectionType.SingleShotConnection
+        )
+        self.worker.finished.connect(
+            self.fetch_component, Qt.ConnectionType.SingleShotConnection
+        )
+
+        self.work_thread.start()
 
     @Slot()
-    def install(self):
-        if not self.worker:
-            return
-
+    def installPackage(self):
         self._downloading = True
         self.preloadChanged.emit()
 
-        print("I'm downloading!")
-
-        # self.worker.moveToThread(self.thread())
-        self.worker.mode = 2
-        # self.worker.moveToThread(self.work_thread)
+        self.work_thread.started.connect(
+            self.worker.install_flatpak, Qt.ConnectionType.SingleShotConnection
+        )
+        self.worker.finished.connect(
+            self.finished, Qt.ConnectionType.SingleShotConnection
+        )
 
         self.work_thread.start()
 

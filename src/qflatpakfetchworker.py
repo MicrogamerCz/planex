@@ -8,53 +8,54 @@ from gi.repository import Flatpak
 
 
 class QFlatpakWorker(QObject):
-    preloadChanged = Signal(str, int)
-    finished = Signal(str)
+    progress = Signal(str, int)
+    finished = Signal()
 
-    def __init__(self, file_path, skipReload):
+    def __init__(self):
         super().__init__()
-        self.file_path = file_path
-        self.skipReload = skipReload
-        self.mode = 0  # 0 is nothing, 1 is refresh, 2 is install
-        self.install: Flatpak.Installation | None = None
+        self.flatpak_ref = self.app_id = self.remote_name = self.branch = ""
+        self.is_runtime = False
+
+        self.install = Flatpak.Installation.new_system(None)
 
     def callback(self, status: str, progress: int, estimate: bool, data):
-        self.preloadChanged.emit(status, progress)
+        self.progress.emit(status, progress)
         return True
 
-    def refreshAppstream(self):
-        with io.open(self.file_path) as file:
-            data = file.read()
-            config = configparser.ConfigParser()
-            config.read_string(data)
-            self.app_id = config.get("Flatpak Ref", "Name")
-            self.remote_name = config.get("Flatpak Ref", "SuggestRemoteName")
-            self.is_runtime = config.get("Flatpak Ref", "IsRuntime") == "true"
-            self.branch = config.get("Flatpak Ref", "Branch")
+    def sync(self):
+        self.install.update_appstream_full_sync(
+            self.remote_name,
+            progress=self.callback,  # pyright: ignore[reportArgumentType]
+            cancellable=None,
+        )
+        self.finished.emit()
 
-            self.install = Flatpak.Installation.new_system(None)
-            if not self.skipReload:
-                self.install.update_appstream_full_sync(
-                    self.remote_name, progress=self.callback, cancellable=None
-                )
-            self.finished.emit(self.app_id)
+    def install_progress(
+        self,
+        transaction: Flatpak.Transaction,
+        operation: Flatpak.TransactionOperation,
+        progress: Flatpak.TransactionProgress,
+    ):
+        def on_progress_changed(p, *args):
+            self.progress.emit(progress.get_status(), progress.get_progress())
 
-    @Slot()
-    def run(self):
-        print("Started to run:", self.mode)
-        match self.mode:
-            case 0:
-                return
-            case 1:
-                self.refreshAppstream()
-            case 2:
-                if not self.install:
-                    return
-                print("installing?")
-                self.install.install(
-                    self.remote_name,
-                    Flatpak.RefKind.RUNTIME if self.is_runtime else Flatpak.RefKind.APP,
-                    self.app_id,
-                    branch=self.branch,
-                    progress=self.callback,
-                )
+        progress.connect("changed", on_progress_changed)
+
+    def install_flatpak(self):
+        transaction = Flatpak.Transaction.new_for_installation(self.install)
+        transaction.add_install(
+            self.remote_name,
+            f"app/{self.app_id}/x86_64/stable",
+        )
+        transaction.connect("new-operation", self.install_progress)
+        transaction.run()
+
+        subprocess.Popen(
+            ["flatpak", "run", self.app_id],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+
+        self.finished.emit()

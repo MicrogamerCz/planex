@@ -23,7 +23,8 @@ PCore.Window {
     QFlatpakMetadata {
         id: flatpak
 
-        onPreloadFinished: stack.currentIndex++
+        onLoaded: stack.currentIndex++
+        onFinished: root.close()
     }
 
     PComp.Page {

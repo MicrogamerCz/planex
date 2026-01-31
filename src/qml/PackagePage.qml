@@ -56,7 +56,7 @@ Item {
                 PComp.Button {
                     anchors.right: parent.right
                     text: "Install"
-                    onClicked: flatpak.install()
+                    onClicked: flatpak.installPackage()
                 }
             }
             // PComp.ProgressBar {
