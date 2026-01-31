@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2026 Micro <microgamercz@proton.me>
+
 import configparser
 import io
 import sys
@@ -6,7 +9,6 @@ import gi
 from planex.qflatpakfetchworker import QFlatpakWorker
 
 # from qflatpakfetchworker import QFlatpakWorker
-
 
 gi.require_version("AppStream", "1.0")
 from gi.repository import AppStream

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-FileCopyrightText: 2026 Micro <microgamercz@proton.me>
+
 import QtQuick
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
