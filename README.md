@@ -19,3 +19,4 @@ A simple flatpak installer built for Plasma.
 - Minimisation to tray/knotification
 - KCM for cache reload config
 - Python → C++ rewrite (better long-term maintanence, performance, less deps)
+- Custom icon
