@@ -12,7 +12,7 @@ A simple flatpak installer built for Plasma.
 
 **Dependencies**: `pyside6 python-gobject, flatpak, appstream, libplasma, layer-shell-qt kirigami qt6-declarative`
 
-*TODO: installation guide*
+**Arch**: `yay -S planex-git`
 
 ## TODOs
 
