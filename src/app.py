@@ -4,12 +4,11 @@ import os
 import signal
 import sys
 
+# from qflatpakmetadata import QFlatpakMetadata  # noqa: F401
+from planex.qflatpakmetadata import QFlatpakMetadata  # noqa: F401
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
-
-# from planex.qflatpakmetadata import QFlatpakMetadata  # noqa: F401
-from qflatpakmetadata import QFlatpakMetadata  # noqa: F401
 
 os.environ["QT_WAYLAND_SHELL_INTEGRATION"] = "layer-shell"
 

@@ -3,9 +3,10 @@ import io
 import sys
 
 import gi
+from planex.qflatpakfetchworker import QFlatpakWorker
 
-# from planex.qflatpakfetchworker import QFlatpakWorker
-from qflatpakfetchworker import QFlatpakWorker
+# from qflatpakfetchworker import QFlatpakWorker
+
 
 gi.require_version("AppStream", "1.0")
 from gi.repository import AppStream
