@@ -1,13 +1,16 @@
+import configparser
+import io
 import sys
 
 import gi
-from planex.qflatpakfetchworker import QFlatpakWorker
+
+# from planex.qflatpakfetchworker import QFlatpakWorker
+from qflatpakfetchworker import QFlatpakWorker
 
 gi.require_version("AppStream", "1.0")
-gi.require_version("Flatpak", "1.0")
-from gi.repository import AppStream, Flatpak
-from PySide6.QtCore import Property, QObject, QThread, Signal, Slot
-from PySide6.QtQml import QmlElement, QmlSingleton
+from gi.repository import AppStream
+from PySide6.QtCore import Property, QObject, Qt, QThread, QTimer, Signal, Slot
+from PySide6.QtQml import QmlElement
 
 QML_IMPORT_NAME = "org.kde.planex"
 QML_IMPORT_MAJOR_VERSION = 1

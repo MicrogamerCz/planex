@@ -6,9 +6,6 @@ import sys
 
 from planex.qflatpakmetadata import QFlatpakMetadata  # noqa: F401
 from PySide6.QtCore import QUrl
-
-# gi.require_version("Flatpak", "1.0")
-# from gi.repository import Flatpak, GLib
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 

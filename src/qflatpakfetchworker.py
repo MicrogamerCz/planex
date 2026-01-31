@@ -1,13 +1,10 @@
-import configparser
-import io
+import subprocess
 
 import gi
-from gi.repository.Gio import Cancellable
+from PySide6.QtCore import QObject, Signal
 
-gi.require_version("AppStream", "1.0")
 gi.require_version("Flatpak", "1.0")
 from gi.repository import Flatpak
-from PySide6.QtCore import QObject, Signal, Slot
 
 
 class QFlatpakWorker(QObject):

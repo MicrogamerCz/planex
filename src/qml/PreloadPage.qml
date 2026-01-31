@@ -1,10 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls as Controls
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.core as PCore
 import org.kde.plasma.components as PComp
-import org.kde.layershell as LS
 
 import org.kde.planex
 
