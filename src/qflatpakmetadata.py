@@ -38,9 +38,6 @@ class QFlatpakMetadata(QObject):
 
         self.work_thread = QThread()
 
-        if len(sys.argv) < 2:
-            return  # TODO: Print error message
-
         if sys.argv[1].endswith(".flatpakref"):
             with io.open(sys.argv[1]) as file:
                 data = file.read()

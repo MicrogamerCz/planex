@@ -13,6 +13,9 @@ os.environ["QT_WAYLAND_SHELL_INTEGRATION"] = "layer-shell"
 
 
 def main():
+    if len(sys.argv) < 2:
+        return
+
     app = QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
 
