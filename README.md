@@ -20,3 +20,4 @@ A simple flatpak installer built for Plasma.
 - KCM for cache reload config
 - Python → C++ rewrite (better long-term maintanence, performance, less deps)
 - Custom icon
+- Blocking sleep when flatpak is installed (or even cache reloaded)
