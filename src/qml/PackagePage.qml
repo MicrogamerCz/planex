@@ -77,27 +77,12 @@ Item {
             //     value: flatpak.preloadPercent
             //     indeterminate: value < 0
             // }
-            ColumnLayout {
-                visible: flatpak.downloading
+            LoadingProgress {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
-                spacing: Kirigami.Units.largeSpacing //Kirigami.Units.gridUnit
 
-                PComp.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: flatpak.preloadMessage
-                }
-                PComp.ProgressBar {
-                    Layout.fillWidth: true
-                    value: flatpak.preloadPercent
-                    indeterminate: value < 0
-                    to: 100
-                }
-                PComp.Button {
-                    text: "Cancel"
-                    Layout.alignment: Qt.AlignHCenter
-                    onClicked: root.close()
-                }
+                visible: flatpak.downloading
+                showHideButton: true
             }
         }
         Kirigami.Separator {
