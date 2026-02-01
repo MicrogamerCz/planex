@@ -6,7 +6,6 @@ import QtQuick.Layouts
 import QtQuick.Controls as Controls
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PComp
-
 import org.kde.planex
 
 Item {
@@ -52,14 +51,22 @@ Item {
             }
 
             Item {
+                Layout.fillHeight: true
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
                 visible: !flatpak.downloading
 
-                PComp.Button {
+                RowLayout {
                     anchors.right: parent.right
-                    text: "Install"
-                    onClicked: flatpak.installPackage()
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    PComp.Button {
+                        text: "Install" // TODO: Update label and function if the app is installed or there's a newer version available
+                        onClicked: flatpak.installPackage()
+                    }
+                    PComp.Button {
+                        text: "Close"
+                        onClicked: root.close()
+                    }
                 }
             }
             // PComp.ProgressBar {
