@@ -1,7 +1,8 @@
 # Maintainer: Peter Jung <ptr1337@archlinux.org>
 # Contributor: Ali Molaei <ali dot molaei at protonmail dot com>
 
-pkgname=planex-git
+_pkgname=planex
+pkgname=${_pkgname}-git
 pkgver=0.1.0
 pkgrel=1
 pkgdesc="Package installer utility for Plasma"
@@ -30,12 +31,12 @@ source=("git+https://github.com/MicrogamerCz/planex.git")
 sha256sums=('SKIP')
 
 build() {
-  cd ${pkgname}
+  cd ${_pkgname}
   python -m build --wheel --no-isolation
 }
 
 package() {
-  cd ${pkgname}
+  cd ${_pkgname}
   python -m installer --destdir="$pkgdir" dist/*.whl
   install -d -m755 "${pkgdir}/usr/share/applications"
   install -d -m755 "${pkgdir}/usr/share/icons/hicolor/scalable/apps/"
