@@ -31,7 +31,10 @@ ColumnLayout {
         PComp.Button {
             visible: progress.showHideButton
             text: "Hide"
-            // onClicked: root.close()
+            onClicked: {
+                notification.sendEvent();
+                root.hide();
+            }
         }
         PComp.Button {
             text: "Cancel"

@@ -15,6 +15,7 @@ depends=(
   appstream
   libplasma
   layer-shell-qt
+  knotifications
   kirigami
   qt6-declarative
 )
@@ -40,5 +41,6 @@ package() {
   install -d -m755 "${pkgdir}/usr/share/icons/hicolor/scalable/apps/"
 
   cp org.kde.planex.desktop "${pkgdir}/usr/share/applications/org.kde.planex.desktop"
+  cp planex.notifyrc "${pkgdir}/usr/share/knotifications6/planex.notifyrc"
 #   cp ./rpmbuild/SOURCES/icon.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/" # TODO
 }

@@ -12,7 +12,16 @@ from planex.qflatpakfetchworker import QFlatpakWorker
 
 gi.require_version("AppStream", "1.0")
 from gi.repository import AppStream
-from PySide6.QtCore import Property, QObject, Qt, QThread, QTimer, Signal, Slot
+from PySide6.QtCore import (
+    Property,
+    QCoreApplication,
+    QObject,
+    Qt,
+    QThread,
+    QTimer,
+    Signal,
+    Slot,
+)
 from PySide6.QtQml import QmlElement
 
 QML_IMPORT_NAME = "org.kde.planex"
@@ -109,6 +118,11 @@ class QFlatpakMetadata(QObject):
         )
 
         self.work_thread.start()
+
+    @Slot()
+    def stopInstall(self):
+        self.work_thread.quit()
+        QCoreApplication.quit()
 
     @Property(bool, notify=preloadChanged)
     def downloading(self):

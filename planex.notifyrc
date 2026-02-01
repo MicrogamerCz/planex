@@ -1,0 +1,10 @@
+[Global]
+IconName=flatpak-discover
+Comment=Planex
+Comment[cs]=Planex
+
+[Event/flatpakInstall]
+Name=Installing flatpak
+Comment=Flatpak package is being installed
+Action=Popup
+Urgency=Low

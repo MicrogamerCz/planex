@@ -7,6 +7,7 @@ A simple flatpak installer built for Plasma.
 - An addon for Plasma desktop
 - DE-agnostic (requires wlr layer shell protocol)
 - Runs application after installing
+- Can be collapsed into a notification for less distraction
 
 ## Installation
 
@@ -16,7 +17,6 @@ A simple flatpak installer built for Plasma.
 
 ## TODOs
 
-- Minimisation to tray/knotification
 - KCM for cache reload config
 - Python → C++ rewrite (better long-term maintanence, performance, less deps)
 - Custom icon
