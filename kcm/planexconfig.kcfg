@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<kcfg
+    xmlns="http://www.kde.org/standards/kcfg/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd"
+>
+  <group name="General">
+    <entry name="FrequencyType" type="Enum">
+      <label>How often are flatpak appstream metadata refreshed.</label>
+      <choices>
+        <choice name="Never">
+          <label
+                    >Metadata refreshes when a requested app is missing in the current metadata</label>
+        </choice>
+        <choice name="Session">
+          <label>Refreshes every time a graphic session starts</label>
+        </choice>
+        <choice name="Regularly">
+          <label>Refreshes every set interval</label>
+        </choice>
+      </choices>
+      <default>1</default>
+    </entry>
+    <entry name="Frequency" type="Int">
+      <label
+            >Sets how often to check, minimum allowed is 1, maximum is set by frequency unit.
+            Limits in practice:
+            1/day → every day, maximum is 7 (once a week)
+            1/week → every week, maximum is 52 (once a year)
+            1/month → every month, maximum is 12 (once a year)</label>
+      <default>1</default>
+    </entry>
+    <entry name="FrequencyUnit" type="Enum">
+      <label>Day/week/month</label>
+      <choices>
+        <choice name="Day">
+          <label>86400 seconds</label>
+        </choice>
+        <choice name="Week">
+          <label>604800 seconds</label>
+        </choice>
+        <choice name="Month">
+          <label
+                    >Anywhere from 2419200 to 2678400 seconds. It's a... 'long' number</label>
+        </choice>
+      </choices>
+      <default>0</default>
+    </entry>
+  </group>
+</kcfg>

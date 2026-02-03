@@ -8,6 +8,7 @@ A simple flatpak installer built for Plasma.
 - DE-agnostic (requires wlr layer shell protocol)
 - Runs application after installing
 - Can be collapsed into a notification for less distraction
+- Customisable settings for appstream data refresh
 
 ## Installation
 
@@ -17,7 +18,7 @@ A simple flatpak installer built for Plasma.
 
 ## TODOs
 
-- KCM for cache reload config
+- Userspace systemd service for updating appstream
 - Python → C++ rewrite (better long-term maintanence, performance, less deps)
 - Custom icon
 - Blocking sleep when flatpak is installed (or even cache reloaded)

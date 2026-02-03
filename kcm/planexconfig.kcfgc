@@ -1,0 +1,7 @@
+File=planexconfig.kcfg
+ClassName=PlanexConfig
+Mutators=true
+DefaultValueGetters=true
+GenerateSignals=true
+GenerateProperties=true
+ParentInConstructor=true
