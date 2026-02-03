@@ -1,2 +1,4 @@
 __pycache__
 pyrightconfig.json
+build/
+.cache

@@ -1,0 +1,13 @@
+{
+  "KPlugin": {
+    "Description": "Configure Planex",
+    "Description[cs]": "Nastavení Planex",
+    "FormFactors": ["desktop", "handset", "tablet", "mediacenter"],
+    "Icon": "flatpak-discover",
+    "Name": "Planex",
+    "Name[cs]": "Planex"
+  },
+  "X-KDE-Keywords": "Planex,Flatpak,Package",
+  "X-KDE-Keywords[cs]": "Planex,Flatpak,Instalace",
+  "X-KDE-System-Settings-Parent-Category": "applications-permissions"
+}
